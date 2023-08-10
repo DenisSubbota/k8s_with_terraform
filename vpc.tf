@@ -1,5 +1,5 @@
 resource "aws_vpc" "denis_k8s_vpc" {
-  cidr_block = "10.0.0.0/18"
+  cidr_block = "172.33.0.0/18"
 
   tags = {
     Name = "denis_k8s_vps VPC"
@@ -7,8 +7,8 @@ resource "aws_vpc" "denis_k8s_vpc" {
 
 }
 resource "aws_subnet" "public_subnet_denis" {
-  vpc_id = aws_instance.denis_test_instance_terraform.id
-  cidr_block = "10.0.0.0/24"
+  vpc_id = aws_vpc.denis_k8s_vpc.id
+  cidr_block = "172.33.0.0/24"
   map_public_ip_on_launch = "true"
   availability_zone = "us-east-1d"
   
@@ -17,8 +17,8 @@ resource "aws_subnet" "public_subnet_denis" {
   } 
 }
 resource "aws_subnet" "private_subnet_denis" {
-  vpc_id = aws_instance.denis_test_instance_terraform.id
-  cidr_block = "10.0.1.0/24"
+  vpc_id = aws_vpc.denis_k8s_vpc.id
+  cidr_block = "172.33.1.0/24"
   map_public_ip_on_launch = "false"
   availability_zone = "us-east-1d"
   
