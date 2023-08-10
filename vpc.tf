@@ -1,11 +1,12 @@
+# Creating VPC entry
 resource "aws_vpc" "denis_k8s_vpc" {
   cidr_block = "172.33.0.0/18"
-
   tags = {
     Name = "denis_k8s_vps VPC"
   } 
 
 }
+# Creating Public Subnet 
 resource "aws_subnet" "public_subnet_denis" {
   vpc_id = aws_vpc.denis_k8s_vpc.id
   cidr_block = "172.33.0.0/24"
@@ -16,6 +17,7 @@ resource "aws_subnet" "public_subnet_denis" {
     Name= "Public Subnet Denis"
   } 
 }
+# Creating Private subnet 
 resource "aws_subnet" "private_subnet_denis" {
   vpc_id = aws_vpc.denis_k8s_vpc.id
   cidr_block = "172.33.1.0/24"
@@ -26,7 +28,7 @@ resource "aws_subnet" "private_subnet_denis" {
     Name= "Private Subnet Denis"
   } 
 }
-
+# Creating Internet gateway
 resource "aws_internet_gateway" "internet_gateway_denis" {
   vpc_id = aws_vpc.denis_k8s_vpc.id
 
@@ -34,6 +36,7 @@ resource "aws_internet_gateway" "internet_gateway_denis" {
     Name = "Denis_VPC internet gateway"
   }
 }
+# Creating public route table 
 resource "aws_route_table" "public_rt_denis" {
     vpc_id = aws_vpc.denis_k8s_vpc.id
 
@@ -45,8 +48,8 @@ resource "aws_route_table" "public_rt_denis" {
     Name= "Public Route Table Denis"
      }
   } 
-
-resource "aws_route_table_association" "public" {
+# Route association table 
+resource "aws_route_table_association" "publicRTassotication" {
     subnet_id = aws_subnet.public_subnet_denis.id
     route_table_id = aws_route_table.public_rt_denis.id
   
