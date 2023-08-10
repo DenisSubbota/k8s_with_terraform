@@ -20,4 +20,10 @@ resource "aws_security_group" "k8s_security_group" {
         protocol  = "-1"
         cidr_blocks = ["0.0.0.0/0"]
     }
+    tags = {
+        name = "Denis terraform security group"
+        owner = "Denis Subbota"
+        project = "terraform+k8s configuration"
+    } 
+
 }
