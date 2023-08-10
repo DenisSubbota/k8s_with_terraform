@@ -5,8 +5,8 @@ provider "aws" {
 resource "aws_security_group" "k8s_security_group" {
     name = "Dinamic Security group"
 
-    dynimic "ingress" {
-        for each ["80","443"]
+    dynamic "ingress" {
+        for_each = [ "80","443" ]
         content {
             from_port = ingress.value
             to_port   = ingress.value
