@@ -1,0 +1,13 @@
+
+- hosts: all
+  remote_user: ubuntu
+  become: yes 
+  tasks:
+  - name: Wget installation
+    apt:
+      name: wget
+      state: latest
+
+
+# roles: 
+# -k8s-repo

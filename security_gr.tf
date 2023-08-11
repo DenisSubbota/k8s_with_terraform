@@ -1,6 +1,6 @@
 resource "aws_security_group" "k8s_security_group" {
     name = "Dynamic Security group"
-    vpc_id = aws_vpc.denis_k8s_vpc.id
+    vpc_id = aws_vpc.denis_k8s_vpc.id # Is needed for vpc.tf and nat.tf 
     dynamic "ingress" {
         for_each = [ "22","6443" ]
         content {
