@@ -1,0 +1,28 @@
+---
+- name: Install docker pre-req.
+  yum:
+    name: ['yum-utils', 'device-mapper-persistent-data', 'lvm2' ]
+    state: present
+    update_cache: true
+
+- name: Add repo docker-ce.repo
+  command: "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+
+- name: Install docker
+  yum:
+      name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'git' ]
+      state: present
+      update_cache: True
+
+- name: Start docker
+  service:
+    name: docker
+    state: started
+    enabled: true
+- name: Allows non-root users to interact with docker 
+  command: "{{ item }}"
+  with_items:
+    - "usermod -aG docker percona"
+    - "newgrp docker"
+
+...

@@ -40,7 +40,7 @@ resource "aws_instance" "denis_test_instance_terraform" {
 
 # Generate inventory file 
 resource "local_file" "inventory" {
- filename = "./inventory/hosts"
+ filename = "./Ansible/hosts"
  content = <<EOF
 [all]
 ${aws_instance.denis_test_instance_terraform.public_ip}
