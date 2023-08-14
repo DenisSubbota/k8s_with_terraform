@@ -61,4 +61,5 @@ resource "null_resource" "ansiblePlaybook" {
 # Below dependency needs to start running ansible scrip once instance is ready to use 
 depends_on = [ aws_instance.denis_test_instance_terraform ]
 }
- 
+ ## terraform apply -auto-approve 
+ ## terraform destroy -auto-approve 
