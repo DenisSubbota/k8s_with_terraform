@@ -1,2 +1,9 @@
----
 # tasks file for k8s-common
+---
+- name: Installing K8s
+  include_tasks: "{{ item }}"
+  loop:
+   - docker.yml
+   - common_os.yml
+   - k8s.yml
+...

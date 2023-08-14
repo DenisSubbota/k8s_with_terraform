@@ -1,13 +1,6 @@
 
 - hosts: all
-  remote_user: ubuntu
+  remote_user: centos
   become: yes 
-  tasks:
-  - name: Wget installation
-    apt:
-      name: wget
-      state: latest
-
-
-# roles: 
-# -k8s-repo
+  roles:
+    - role: 'roles/k8s-common'

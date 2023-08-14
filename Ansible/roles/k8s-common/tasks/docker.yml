@@ -20,9 +20,16 @@
     state: started
     enabled: true
 - name: Allows non-root users to interact with docker 
-  command: "{{ item }}"
-  with_items:
-    - "usermod -aG docker percona"
-    - "newgrp docker"
+  command: "usermod -aG docker centos"
+- name: Add user to docker group
+  ansible.builtin.user:
+    name: centos
+    groups: docker
+    append: true
+- name: Reset ssh connection to allow user changes to affect ansible user
+  ansible.builtin.meta:
+    reset_connection
+
+  
 
 ...

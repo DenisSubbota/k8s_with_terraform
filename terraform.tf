@@ -15,8 +15,9 @@ resource "aws_key_pair" "denis_pub_key" {
 
 #Creating single ec2 instance
 resource "aws_instance" "denis_test_instance_terraform" {
-    ami = "ami-0261755bbcb8c4a84"       # Ubuntu 20 
-    instance_type = "t3.micro"
+    # ami = "ami-0261755bbcb8c4a84"       # Ubuntu 20 
+    ami = "ami-002070d43b0a4f171"         # Centos07
+    instance_type = "t2.large"
     subnet_id = aws_subnet.public_subnet_denis.id #were needed for vpc.tf and nat.tf 
     vpc_security_group_ids = [ aws_security_group.k8s_security_group.id ]
     key_name = "denis_pub_key"
@@ -26,7 +27,7 @@ resource "aws_instance" "denis_test_instance_terraform" {
         inline = ["echo 'Wait untill SSH is ready' "]
         connection{
             type = "ssh"
-            user = "ubuntu"
+            user = "centos"
             host = aws_instance.denis_test_instance_terraform.public_ip
         }
     }
@@ -34,6 +35,7 @@ resource "aws_instance" "denis_test_instance_terraform" {
         Name = "Denis terraform instance"
         Owner = "Denis Subbota"
         Project = "terraform+k8s configuration"
+        PerconaCreatedBy = "denis.subbota@percona.com"
     } 
 }
 
@@ -42,7 +44,7 @@ resource "aws_instance" "denis_test_instance_terraform" {
 resource "local_file" "inventory" {
  filename = "./Ansible/hosts"
  content = <<EOF
-[all]
+[kuber]
 ${aws_instance.denis_test_instance_terraform.public_ip}
 # {aws_instance.webserver[1].public_ip}
 # [dbserve]
@@ -54,8 +56,9 @@ EOF
 resource "null_resource" "ansiblePlaybook" {
   
  provisioner "local-exec" {
-    command =  "ansible-playbook -i ./inventory/hosts k8s_primary.yaml"
+    command =  "ansible-playbook -i ./Ansible/hosts ./Ansible/k8s_primary.yaml"
   }
+# Below dependency needs to start running ansible scrip once instance is ready to use 
 depends_on = [ aws_instance.denis_test_instance_terraform ]
 }
  
