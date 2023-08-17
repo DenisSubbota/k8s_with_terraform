@@ -1,2 +1,6 @@
 ---
 # tasks file for k8s-control-plane
+- name: Initialization  K8s
+  include_tasks: "{{ item }}"
+  loop:
+   - cluster_init.yml

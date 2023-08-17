@@ -1,6 +1,16 @@
 
-- hosts: all
+#Common steps for control plane and worker  k8s node 
+# - hosts: all
+#   remote_user: centos
+#   become: yes 
+#   roles:
+#     - role: 'roles/k8s-common'
+
+# k8s contorl plane node configuration
+- hosts: kuber-plane
   remote_user: centos
-  become: yes 
+  become: yes
   roles:
-    - role: 'roles/k8s-common'
+  # - role: 'roles/k8s-common'
+   - role: 'roles/k8s-control-plane'
+

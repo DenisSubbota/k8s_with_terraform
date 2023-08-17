@@ -2,11 +2,14 @@
 # to refer value you just need to specify var.denis_name_variable
 # to combine 2 variables you may use "${var.denis_name_variable}-${var.denis_lastname_variable}
 
-variable "denis_name_variable" {
-    default = "Denis"
+variable "instance-type" {
+    default = "t2.large"
 }
 
-variable "denis_lastname_variable" {
-  default = "Subbota"
+variable "ami-centos" {
+  default = "ami-002070d43b0a4f171"
 }
 
+variable "ami-ubuntu" {
+  default = "ami-0261755bbcb8c4a84"
+}

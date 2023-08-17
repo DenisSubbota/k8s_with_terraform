@@ -1,0 +1,38 @@
+- name: check if config file for k8s exists  
+  stat: 
+    path: /etc/kubernetes/admin.conf
+  register: k8sconfigfile
+
+- name: check if .config file for k8s exists in home directory  
+  stat: 
+    path: /home/centos/.kube/config
+  register: homek8sconfigfile
+
+- name: k8s cluster initialization
+  command: "kubeadm init"
+  when: k8sconfigfile.stat.exists == False
+
+- name: Manage Cluster as Regular User   
+  command: "{{ item }}"
+  with_items:
+     - "mkdir -p /home/centos/.kube"
+     - "cp -i /etc/kubernetes/admin.conf /home/centos/.kube/config"
+  when: homek8sconfigfile.stat.exists == False
+  
+- name: Change kubeconfig file permission
+  file:
+    path: /home/centos/.kube/config 
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Verify that cluster is initialized OK
+  become: false
+  command: "kubectl get nodes"
+  register: variablek
+- debug:
+   var: variablek.stdout_lines  
+    
+
+- name: Install Pod network add-on plugin (weave-net)
+  command: "kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml"
+
